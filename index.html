@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>牌位內板試印</title>
+    <title>祖先牌位內板格式器</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
@@ -10,22 +10,12 @@
 <body>
 
 <div class="container">
-    <h3 class="text-center pt-2">牌位內板試印</h3>
+    <h3 class="text-center pt-2">祖先牌位內板格式器</h3>
     <hr>
     <div class="row">
         <div class="form-group textarea-wrap">
-    <textarea name="" id="text" cols="" rows="" class="textarea form-control">
-父 邱某某
- 生於吉年吉月吉日吉時
- 卒於吉年吉月吉日吉時
-父 邱某某
- 生於吉年吉月吉日吉時
- 卒於吉年吉月吉日吉時
-父 邱某某
- 生於吉年吉月吉日吉時
- 卒於吉年吉月吉日吉時
-子 大同
-註記：族譜登載邱有斐之母為張氏，應是登記族譜時只知母為張姓不知其名或其他風俗所致，故以氏為代表之，現於牌位內板特別註記，以彰顯其在家族中之尊位。</textarea>
+    <textarea id="text" class="textarea form-control">
+</textarea>
         </div>
     </div>
     <br>
@@ -79,7 +69,7 @@
     changeBtn.addEventListener('click', changeFormatHandle);
 
     function changeFormatHandle() {
-        let text = document.getElementById('text').value;
+        let text = document.getElementById('text');
         let list = document.createElement('ul');
         let formatTypeObj = document.getElementById('formatType');
         let formatType;
@@ -88,23 +78,23 @@
         // 選擇格式
         let typeChild = formatTypeObj.getElementsByTagName('input');
 
-        console.log(typeChild);
+        // console.log(typeChild);
         for (let key in typeChild) {
             if (typeChild[key].checked) {
                 formatType = typeChild[key].value;
             }
         }
-        console.log(formatType);
+        // console.log(formatType);
 
         // 處理字串
-        let arr = text.split('\n'); // 以斷行切成array
+        let arr = text.value.split('\n'); // 以斷行切成array
 
         for (var i = 0; i < arr.length; i++) {
             arr[i] += '<br/>'; // 每行加br
             arr[i] = arr[i].replace(/^\s? | \s$/g, ''); // 去除前後空白
             arr[i] = arr[i].replace(/<br\/>$/g, ''); // 如果最後有br
         }
-        console.log(arr);
+        // console.log(arr);
 
 
         //內板序號
@@ -144,6 +134,7 @@
             list.appendChild(liObj);
             table.appendChild(list);
         }
+        text.value = '';
     }
 
     //預覽列印
