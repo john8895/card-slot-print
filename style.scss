@@ -107,7 +107,19 @@ body {
         }
     }
 }
+// 一房2位+註記
+ul.twoAddUl {
+    li {
+        &:nth-of-type(2), &:nth-of-type(3), &:nth-of-type(5), &:nth-of-type(6) {
+            text-indent: 3em;
+        }
 
+        &:last-child {
+            @extend %lastTag;
+            text-align: justify;
+        }
+    }
+}
 // 一房3位+註記
 ul.thirdAddUl {
     li {

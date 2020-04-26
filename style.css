@@ -35,7 +35,7 @@ body {
   margin-top: 20px;
 }
 
-ul.thirdAddUl li:last-child, .list li.singleAdd:last-child {
+ul.thirdAddUl li:last-child, ul.twoAddUl li:last-child, .list li.singleAdd:last-child {
   text-align: justify;
   height: 270px;
   margin-right: 10px;
@@ -84,6 +84,13 @@ ul.thirdUl li:last-child, .list li.last, .list li:last-child {
 .list li.singleAdd:nth-of-type(4) {
   text-align: right;
 }
+ul.twoAddUl li:nth-of-type(2), ul.twoAddUl li:nth-of-type(3), ul.twoAddUl li:nth-of-type(5), ul.twoAddUl li:nth-of-type(6) {
+  text-indent: 3em;
+}
+ul.twoAddUl li:last-child {
+  text-align: justify;
+}
+
 ul.thirdAddUl li:nth-of-type(2), ul.thirdAddUl li:nth-of-type(3), ul.thirdAddUl li:nth-of-type(5), ul.thirdAddUl li:nth-of-type(6), ul.thirdAddUl li:nth-of-type(8), ul.thirdAddUl li:nth-of-type(9) {
   text-indent: 3em;
 }

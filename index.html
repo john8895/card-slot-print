@@ -19,8 +19,6 @@
         </div>
     </div>
     <br>
-
-
     <div id="formatType" class="formatType">
         <h5>內板格式</h5>
         <div class="row form-check form-check-inline">
@@ -84,7 +82,7 @@
                 formatType = typeChild[key].value;
             }
         }
-        // console.log(formatType);
+        console.log(formatType);
 
         // 處理字串
         let arr = text.value.split('\n'); // 以斷行切成array
@@ -94,7 +92,7 @@
             arr[i] = arr[i].replace(/^\s? | \s$/g, ''); // 去除前後空白
             arr[i] = arr[i].replace(/<br\/>$/g, ''); // 如果最後有br
         }
-        // console.log(arr);
+        console.log(arr);
 
 
         //內板序號
@@ -105,6 +103,14 @@
         }
         list.setAttribute('data-num', numCount);
 
+        // 去掉空數組，以免輸出時計數錯誤導致樣式套不到
+        for (let key in arr) {
+            if(arr[key]===''){
+                arr.splice(key,1)
+                // console.log(arr[key]);
+
+            }
+        }
         // 輸出格式
         for (var i = 0; i < arr.length; i++) {
             list.classList.add('list');
@@ -112,8 +118,12 @@
             switch (formatType) {
                 //one , singleAdd , twoAdd , thirdAdd
                 case 'singleAdd':
-                case 'twoAdd':
                     liObj.classList.add(i === arr.length - 1 ? 'singleAdd' : 'item');
+                    liObj.classList.add(i === arr.length - 2 ? 'last' : 'item');
+                    break;
+                case 'twoAdd':
+                    list.classList.add(i === arr.length - 1 ? 'twoAddUl' : 'listObj');
+                    liObj.classList.add(i === arr.length - 1 ? 'twoAdd' : 'item');
                     liObj.classList.add(i === arr.length - 2 ? 'last' : 'item');
                     break;
                 case 'third':
@@ -128,8 +138,7 @@
                 default:
                     break;
             }
-            // 如果陣列為空就跳出
-            if (!arr[i]) continue;
+
             liObj.innerHTML = arr[i];
             list.appendChild(liObj);
             table.appendChild(list);
