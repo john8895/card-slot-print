@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>牌位內板試印</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h3 class="text-center pt-2">牌位內板試印</h3>
+    <hr>
+    <div class="row">
+        <div class="form-group textarea-wrap">
+    <textarea name="" id="text" cols="" rows="" class="textarea form-control">
+父 邱某某
+ 生於吉年吉月吉日吉時
+ 卒於吉年吉月吉日吉時
+父 邱某某
+ 生於吉年吉月吉日吉時
+ 卒於吉年吉月吉日吉時
+父 邱某某
+ 生於吉年吉月吉日吉時
+ 卒於吉年吉月吉日吉時
+子 大同
+註記：族譜登載邱有斐之母為張氏，應是登記族譜時只知母為張姓不知其名或其他風俗所致，故以氏為代表之，現於牌位內板特別註記，以彰顯其在家族中之尊位。</textarea>
+        </div>
+    </div>
+    <br>
+
+
+    <div id="formatType" class="formatType">
+        <h5>內板格式</h5>
+        <div class="row form-check form-check-inline">
+            <label class="form-check-label">
+                <input type="radio" name="formatType" value="one" class="form-check-input">一房兩位 / 一房一位
+            </label>
+            <label class="form-check-label ml-2">
+                <input type="radio" name="formatType" value="third" class="form-check-input">一房三位
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    <input type="radio" name="formatType" value="singleAdd" class="form-check-input">一房一位加註記
+                </label>
+                <label class="form-check-label ml-2">
+                    <input type="radio" name="formatType" value="twoAdd" class="form-check-input">一房兩位+註記
+                </label>
+                <label class="form-check-label ml-2">
+                    <input type="radio" name="formatType" value="thirdAdd" class="form-check-input">一房三位+註記
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="text-center btn-wrap">
+        <button type="button" id="changeBtn" class="btn btn-primary">轉換</button>
+        <button type="button" id="print" class="btn btn-danger ml-2">列印</button>
+    </div>
+    <hr>
+    <div id="result" class="result">
+        <h5>內板預覽</h5>
+        <hr>
+        <div id="table">
+        </div>
+    </div>
+
+
+</div>
+<script>
+    const table = document.getElementById('table');
+    const changeBtn = document.getElementById('changeBtn');
+    const printBtn = document.getElementById('print');
+    let numCount;
+
+    changeBtn.addEventListener('click', changeFormatHandle);
+
+    function changeFormatHandle() {
+        let text = document.getElementById('text').value;
+        let list = document.createElement('ul');
+        let formatTypeObj = document.getElementById('formatType');
+        let formatType;
+
+
+        // 選擇格式
+        let typeChild = formatTypeObj.getElementsByTagName('input');
+
+        console.log(typeChild);
+        for (let key in typeChild) {
+            if (typeChild[key].checked) {
+                formatType = typeChild[key].value;
+            }
+        }
+        console.log(formatType);
+
+        // 處理字串
+        let arr = text.split('\n'); // 以斷行切成array
+
+        for (var i = 0; i < arr.length; i++) {
+            arr[i] += '<br/>'; // 每行加br
+            arr[i] = arr[i].replace(/^\s? | \s$/g, ''); // 去除前後空白
+            arr[i] = arr[i].replace(/<br\/>$/g, ''); // 如果最後有br
+        }
+        console.log(arr);
+
+
+        //內板序號
+        if (table.children.length > 0) {
+            numCount++;
+        } else {
+            numCount = 1;
+        }
+        list.setAttribute('data-num', numCount);
+
+        // 輸出格式
+        for (var i = 0; i < arr.length; i++) {
+            list.classList.add('list');
+            let liObj = document.createElement('li');
+            switch (formatType) {
+                //one , singleAdd , twoAdd , thirdAdd
+                case 'singleAdd':
+                case 'twoAdd':
+                    liObj.classList.add(i === arr.length - 1 ? 'singleAdd' : 'item');
+                    liObj.classList.add(i === arr.length - 2 ? 'last' : 'item');
+                    break;
+                case 'third':
+                    list.classList.add(i === arr.length - 1 ? 'thirdUl' : 'listObj');
+                    liObj.classList.add(i === arr.length - 1 ? 'last' : 'item');
+                    break;
+                case 'thirdAdd':
+                    list.classList.add(i === arr.length - 1 ? 'thirdAddUl' : 'listObj');
+                    liObj.classList.add(i === arr.length - 1 ? 'thirdAdd' : 'item');
+                    liObj.classList.add(i === arr.length - 2 ? 'last' : 'item');
+                    break;
+                default:
+                    break;
+            }
+            // 如果陣列為空就跳出
+            if (!arr[i]) continue;
+            liObj.innerHTML = arr[i];
+            list.appendChild(liObj);
+            table.appendChild(list);
+        }
+    }
+
+    //預覽列印
+    printBtn.addEventListener('click', printHandle);
+
+    function printHandle() {
+        if (!table.children.length) {
+            alert('還沒有內容可以印喔！')
+            return;
+        }
+        var printTitle = '預覽列印',
+            printContent = table.innerHTML,
+            printWindow = window.open('', '_blank', '', false);
+
+        printWindow.document.write(
+            '<html>' +
+            '<head>' +
+            '<meta name="charset" content="utf-8" />' +
+            '<title>' + printTitle + '</title>' +
+            '<link rel="stylesheet" href="style.css"/>' +
+            '</head>' +
+            '<body>' + printContent + '</body>' +
+            '</html>'
+        );
+        // printWindow.print();
+        // printWindow.close();
+    }
+</script>
+</body>
+</html>
